@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3.3T Lambda II Leaderboard | G70 • Stinger • G80</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Rajdhani for high-octane motorsport aesthetic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Rajdhani:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['Rajdhani', 'monospace', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              red: '#EF4444',
+              crimson: '#DC2626',
+              cyan: '#06B6D4',
+              amber: '#F59E0B',
+              dark: '#0B0F17',
+              panel: '#111827',
+              border: '#1F2937'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #07090e;
+      color: #E2E8F0;
+      font-family: 'Inter', sans-serif;
+    }
+    .font-racing {
+      font-family: 'Rajdhani', sans-serif;
+    }
+    .carbon-bg {
+      background-color: #0d111a;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 0);
+      background-size: 16px 16px;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+    .glow-cyan {
+      box-shadow: 0 0 20px -3px rgba(6, 182, 212, 0.25);
+    }
+    .glow-red {
+      box-shadow: 0 0 20px -3px rgba(239, 68, 68, 0.35);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col carbon-bg antialiased text-slate-100">
+
+  <!-- Top Navigation Header -->
+  <header class="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <!-- Logo & Branding -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-red-600 via-red-500 to-amber-500 flex items-center justify-center shadow-lg shadow-red-500/20">
+          <i data-lucide="gauge" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xl sm:text-2xl font-black tracking-wider font-racing uppercase bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
+              3.3T <span class="text-red-500">LAMBDA II</span>
+            </span>
+            <span class="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded bg-red-500/10 text-red-400 border border-red-500/20">Official Rankings</span>
+          </div>
+          <p class="text-xs text-slate-400 hidden sm:block">Genesis G70 • Kia Stinger GT • Genesis G80 Sport</p>
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <div class="flex items-center gap-3">
+        <button id="btnOpenSubmit" class="relative group overflow-hidden px-4 py-2.5 rounded-lg bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-semibold text-xs sm:text-sm shadow-lg shadow-red-700/25 transition-all duration-200 active:scale-95 flex items-center gap-2">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i>
+          <span>Submit Run</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="border-b border-slate-800/50 bg-slate-900/40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center sm:text-left">
+        <div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-slate-950/50 border border-slate-800/60">
+          <div class="p-2 rounded-md bg-amber-500/10 text-amber-400">
+            <i data-lucide="trophy" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-[11px] uppercase tracking-wider text-slate-400 font-medium">Record 1/4 Mile</div>
+            <div class="font-racing text-lg font-bold text-amber-400" id="statRecordQuarter">9.872s @ 142.1 mph</div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-slate-950/50 border border-slate-800/60">
+          <div class="p-2 rounded-md bg-cyan-500/10 text-cyan-400">
+            <i data-lucide="zap" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-[11px] uppercase tracking-wider text-slate-400 font-medium">Fastest 60-130</div>
+            <div class="font-racing text-lg font-bold text-cyan-400" id="statRecordSixty">6.42s</div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-slate-950/50 border border-slate-800/60">
+          <div class="p-2 rounded-md bg-emerald-500/10 text-emerald-400">
+            <i data-lucide="badge-check" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-[11px] uppercase tracking-wider text-slate-400 font-medium">Verified Slips</div>
+            <div class="font-racing text-lg font-bold text-emerald-400" id="statVerifiedCount">100% Validated</div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-slate-950/50 border border-slate-800/60">
+          <div class="p-2 rounded-md bg-red-500/10 text-red-400">
+            <i data-lucide="users" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-[11px] uppercase tracking-wider text-slate-400 font-medium">Active Submissions</div>
+            <div class="font-racing text-lg font-bold text-slate-100" id="statActiveCount">12 Entries</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+    <!-- Category Metric Tabs -->
+    <div class="flex items-center justify-between flex-wrap gap-4 pb-4">
+      <div class="flex items-center gap-2 p-1.5 rounded-xl bg-slate-900/90 border border-slate-800 w-full sm:w-auto overflow-x-auto custom-scroll">
+        <button class="metric-tab flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-150 bg-red-600 text-white shadow-md shadow-red-900/30" data-metric="quarter">
+          <i data-lucide="flag" class="w-4 h-4"></i>
+          <span>1/4 Mile</span>
+        </button>
+        <button class="metric-tab flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-150 text-slate-400 hover:text-white hover:bg-slate-800/60" data-metric="sixtyToOneThirty">
+          <i data-lucide="activity" class="w-4 h-4"></i>
+          <span>60–130 MPH</span>
+        </button>
+        <button class="metric-tab flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-150 text-slate-400 hover:text-white hover:bg-slate-800/60" data-metric="eighth">
+          <i data-lucide="timer" class="w-4 h-4"></i>
+          <span>1/8 Mile</span>
+        </button>
+        <button class="metric-tab flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-150 text-slate-400 hover:text-white hover:bg-slate-800/60" data-metric="zeroToSixty">
+          <i data-lucide="fast-forward" class="w-4 h-4"></i>
+          <span>0–60 MPH</span>
+        </button>
+      </div>
+
+      <!-- Search bar -->
+      <div class="relative w-full sm:w-72">
+        <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+        <input type="text" id="searchInput" placeholder="Search driver, tune, fuel..." class="w-full bg-slate-900/90 border border-slate-800 text-sm rounded-xl pl-10 pr-4 py-2.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-red-500/80 focus:ring-1 focus:ring-red-500 transition-all">
+      </div>
+    </div>
+
+    <!-- Secondary Filters Row (Vehicle, Drivetrain, Turbo Class) -->
+    <div class="mt-2 mb-6 p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 flex flex-col lg:flex-row gap-4 justify-between items-start lg:items-center">
+      
+      <!-- Chassis filter -->
+      <div class="flex items-center gap-2 flex-wrap">
+        <span class="text-xs uppercase font-bold text-slate-400 mr-1 flex items-center gap-1.5">
+          <i data-lucide="car" class="w-3.5 h-3.5"></i> Chassis:
+        </span>
+        <button class="chassis-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-white border border-slate-700" data-chassis="ALL">All Chassis</button>
+        <button class="chassis-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950/70 text-slate-400 hover:text-white border border-slate-800" data-chassis="Genesis G70">Genesis G70</button>
+        <button class="chassis-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950/70 text-slate-400 hover:text-white border border-slate-800" data-chassis="Kia Stinger">Kia Stinger</button>
+        <button class="chassis-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950/70 text-slate-400 hover:text-white border border-slate-800" data-chassis="Genesis G80">Genesis G80</button>
+      </div>
+
+      <!-- Drivetrain & Turbo Class -->
+      <div class="flex items-center gap-4 flex-wrap w-full lg:w-auto">
+        <!-- Drivetrain -->
+        <div class="flex items-center gap-1.5">
+          <span class="text-xs uppercase font-bold text-slate-400 mr-1">Drive:</span>
+          <button class="drive-pill px-3 py-1 rounded-md text-xs font-semibold bg-slate-800 text-white border border-slate-700" data-drive="ALL">ALL</button>
+          <button class="drive-pill px-3 py-1 rounded-md text-xs font-semibold bg-slate-950/70 text-cyan-400/80 hover:text-cyan-400 border border-slate-800" data-drive="AWD">AWD</button>
+          <button class="drive-pill px-3 py-1 rounded-md text-xs font-semibold bg-slate-950/70 text-amber-400/80 hover:text-amber-400 border border-slate-800" data-drive="RWD">RWD</button>
+        </div>
+
+        <div class="h-4 w-px bg-slate-800 hidden sm:block"></div>
+
+        <!-- Class dropdown -->
+        <div class="flex items-center gap-2">
+          <span class="text-xs uppercase font-bold text-slate-400">Class:</span>
+          <select id="classFilter" class="bg-slate-950 text-xs font-medium text-slate-200 border border-slate-800 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-red-500">
+            <option value="ALL">All Engine/Turbo Classes</option>
+            <option value="Stock Turbo">Stock Turbo (Pump / CPI / WMI)</option>
+            <option value="Upgraded Turbo">Upgraded/Hybrid Turbos (Pure/ENR/Lozic)</option>
+            <option value="Built Engine">Built Engine</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leaderboard Table Container -->
+    <div class="bg-slate-900/80 border border-slate-800/90 rounded-2xl overflow-hidden shadow-2xl backdrop-blur-sm">
+      <div class="overflow-x-auto custom-scroll">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-slate-800 bg-slate-950/60 text-slate-400 text-xs font-semibold uppercase tracking-wider">
+              <th class="py-4 px-4 sm:px-6 w-16 text-center">Rank</th>
+              <th class="py-4 px-4">Driver / Handle</th>
+              <th class="py-4 px-4">Chassis</th>
+              <th class="py-4 px-4 text-center">Drive</th>
+              <th class="py-4 px-4" id="tableHeaderMetric">1/4 Mile ET</th>
+              <th class="py-4 px-4">Trap Speed</th>
+              <th class="py-4 px-4 hidden md:table-cell">60 Foot</th>
+              <th class="py-4 px-4 hidden lg:table-cell">Mod Class & Fuel</th>
+              <th class="py-4 px-4 text-center">Proof</th>
+              <th class="py-4 px-4 text-right">Details</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboardBody" class="divide-y divide-slate-800/60 text-sm">
+            <!-- Dynamic rows injected here -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty state when search/filter returns zero -->
+      <div id="noResults" class="hidden p-12 text-center">
+        <div class="inline-flex p-3 rounded-full bg-slate-800/50 text-slate-400 mb-3">
+          <i data-lucide="filter-x" class="w-8 h-8"></i>
+        </div>
+        <h4 class="text-base font-bold text-slate-200">No matching 3.3T runs found</h4>
+        <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto">Try clearing your search query or selecting "All Chassis" / "All Drivetrains" to broaden your filters.</p>
+        <button id="btnResetFilters" class="mt-4 px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition">Reset All Filters</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- View Slip & Specs Modal -->
+  <div id="slipModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden transition-opacity duration-200">
+    <div class="relative w-full max-w-3xl bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <!-- Header -->
+      <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/70">
+        <div class="flex items-center gap-3">
+          <span id="modalRankBadge" class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-racing font-bold text-lg flex items-center justify-center border border-amber-500/40">#1</span>
+          <div>
+            <h3 id="modalDriverName" class="text-lg font-bold text-white flex items-center gap-2">Driver Name</h3>
+            <p id="modalVehicleSubtitle" class="text-xs text-slate-400">Kia Stinger GT • AWD • Stock Turbos</p>
+          </div>
+        </div>
+        <button id="btnCloseSlipModal" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Body Scrollable -->
+      <div class="p-6 overflow-y-auto custom-scroll space-y-6">
+        
+        <!-- Dragy Style Readout Card -->
+        <div class="p-5 rounded-xl bg-black border border-slate-800 relative overflow-hidden">
+          <div class="flex items-center justify-between border-b border-slate-800/80 pb-3 mb-4">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-red-600 text-white tracking-widest uppercase">dragy</span>
+              <span class="text-xs text-emerald-400 font-semibold flex items-center gap-1">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Validated Slope
+              </span>
+            </div>
+            <div class="text-xs text-slate-400 font-racing" id="modalRunDate">2026-03-24 • Atco Raceway</div>
+          </div>
+
+          <!-- Times Grid -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+            <div class="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
+              <div class="text-[11px] text-slate-400 uppercase">60 Foot</div>
+              <div id="modal60ft" class="font-racing text-xl font-bold text-white mt-0.5">1.542s</div>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
+              <div class="text-[11px] text-slate-400 uppercase">330 Foot</div>
+              <div id="modal330ft" class="font-racing text-xl font-bold text-white mt-0.5">4.310s</div>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
+              <div class="text-[11px] text-slate-400 uppercase">1/8 Mile</div>
+              <div id="modalEighth" class="font-racing text-xl font-bold text-cyan-400 mt-0.5">6.52s @ 107.4</div>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
+              <div class="text-[11px] text-slate-400 uppercase">60–130 MPH</div>
+              <div id="modalSixtyToHundredThirty" class="font-racing text-xl font-bold text-amber-400 mt-0.5">7.15s</div>
+            </div>
+          </div>
+
+          <!-- Primary Quarter Mile Highlight -->
+          <div class="mt-4 p-4 rounded-xl bg-gradient-to-r from-red-950/40 via-slate-900 to-slate-950 border border-red-900/40 flex items-center justify-between">
+            <div>
+              <div class="text-xs uppercase font-bold tracking-wider text-red-400">Official 1/4 Mile ET</div>
+              <div id="modalQuarterTime" class="font-racing text-3xl sm:text-4xl font-extrabold text-white">10.128s</div>
+            </div>
+            <div class="text-right">
+              <div class="text-xs uppercase font-bold tracking-wider text-slate-400">Trap Speed</div>
+              <div id="modalTrapSpeed" class="font-racing text-3xl sm:text-4xl font-extrabold text-white">134.82 <span class="text-lg font-normal text-slate-400">MPH</span></div>
+            </div>
+          </div>
+
+          <!-- Environmental Conditions -->
+          <div class="mt-3 flex items-center justify-between text-xs text-slate-400 px-1">
+            <span>DA: <strong id="modalDA" class="text-slate-200">-120 ft</strong></span>
+            <span>Slope: <strong id="modalSlope" class="text-emerald-400">-0.48% (Legal)</strong></span>
+            <span>Tires: <strong id="modalTires" class="text-slate-200">Mickey Thompson ET Street SS</strong></span>
+          </div>
+        </div>
+
+        <!-- Build Specifications Breakdown -->
+        <div>
+          <h4 class="text-sm uppercase tracking-wider font-bold text-slate-300 mb-3 flex items-center gap-2">
+            <i data-lucide="wrench" class="w-4 h-4 text-red-500"></i> Full Mod List & Engine Tuning
+          </h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div class="p-3 rounded-lg bg-slate-950 border border-slate-800">
+              <span class="text-slate-400 block font-semibold">ECU / TCU Tuning:</span>
+              <span id="modalTuning" class="text-slate-200 mt-0.5 block font-medium">JB4 + Lozic TCU Stage 3</span>
+            </div>
+            <div class="p-3 rounded-lg bg-slate-950 border border-slate-800">
+              <span class="text-slate-400 block font-semibold">Fuel System:</span>
+              <span id="modalFuel" class="text-slate-200 mt-0.5 block font-medium">E40 Fuel Blend + BMS CPI</span>
+            </div>
+            <div class="p-3 rounded-lg bg-slate-950 border border-slate-800">
+              <span class="text-slate-400 block font-semibold">Turbos & Wastegates:</span>
+              <span id="modalTurbos" class="text-slate-200 mt-0.5 block font-medium">OEM TD04 Twin Turbos</span>
+            </div>
+            <div class="p-3 rounded-lg bg-slate-950 border border-slate-800">
+              <span class="text-slate-400 block font-semibold">Bolt-on Hardware:</span>
+              <span id="modalHardware" class="text-slate-200 mt-0.5 block font-medium">BMS Intakes, Wagner IC, Primary Catless Downpipes</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Social link / notes -->
+        <div class="p-4 rounded-xl bg-slate-950/70 border border-slate-800 flex items-center justify-between">
+          <div class="flex items-center gap-2 text-xs text-slate-400">
+            <i data-lucide="instagram" class="w-4 h-4 text-pink-500"></i>
+            <span>Driver handle:</span>
+            <span id="modalDriverHandle" class="text-slate-200 font-semibold">@stinger_33</span>
+          </div>
+          <button id="btnCopyRecord" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium transition flex items-center gap-1.5">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy Run Link
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Submit Run Modal -->
+  <div id="submitModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden transition-opacity duration-200">
+    <div class="relative w-full max-w-2xl bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+      <!-- Header -->
+      <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/80">
+        <div>
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <i data-lucide="plus-circle" class="w-5 h-5 text-red-500"></i> Submit 3.3T Time Slip
+          </h3>
+          <p class="text-xs text-slate-400">All submissions require Dragy screenshot or verified NHRA/track time slip.</p>
+        </div>
+        <button id="btnCloseSubmitModal" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Form Body -->
+      <form id="submitRunForm" class="p-6 overflow-y-auto custom-scroll space-y-4 text-xs">
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-semibold text-slate-300 mb-1">Driver / Real Name *</label>
+            <input type="text" id="inputDriver" required placeholder="e.g. Alex Mitchell" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 placeholder-slate-600 focus:outline-none focus:border-red-500">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-300 mb-1">Social Handle (Instagram / Forum)</label>
+            <input type="text" id="inputHandle" placeholder="@boosted_g70" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 placeholder-slate-600 focus:outline-none focus:border-red-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block font-semibold text-slate-300 mb-1">Vehicle Model *</label>
+            <select id="inputChassis" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 focus:outline-none focus:border-red-500">
+              <option value="Genesis G70">Genesis G70 (3.3T)</option>
+              <option value="Kia Stinger">Kia Stinger GT (3.3T)</option>
+              <option value="Genesis G80">Genesis G80 Sport (3.3T)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-300 mb-1">Drivetrain *</label>
+            <select id="inputDrive" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 focus:outline-none focus:border-red-500">
+              <option value="AWD">AWD (All-Wheel Drive)</option>
+              <option value="RWD">RWD (Rear-Wheel Drive)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-300 mb-1">Turbo / Engine Class *</label>
+            <select id="inputClass" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 focus:outline-none focus:border-red-500">
+              <option value="Stock Turbo">Stock Turbos</option>
+              <option value="Upgraded Turbo">Upgraded/Hybrid Turbos</option>
+              <option value="Built Engine">Built Engine</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800 space-y-3">
+          <span class="font-bold text-slate-300 block uppercase tracking-wider text-[11px]">Performance Timing Slips</span>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div>
+              <label class="block text-slate-400 mb-1">1/4 Mile (sec) *</label>
+              <input type="number" step="0.001" id="inputQuarter" required placeholder="10.850" class="w-full bg-slate-900 border border-slate-700/80 rounded-lg p-2 text-slate-200 font-racing font-bold text-sm focus:outline-none focus:border-red-500">
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1">Trap Speed (mph) *</label>
+              <input type="number" step="0.01" id="inputTrap" required placeholder="128.4" class="w-full bg-slate-900 border border-slate-700/80 rounded-lg p-2 text-slate-200 font-racing font-bold text-sm focus:outline-none focus:border-red-500">
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1">60-130 MPH (sec)</label>
+              <input type="number" step="0.01" id="inputSixtyToOneThirty" placeholder="8.10" class="w-full bg-slate-900 border border-slate-700/80 rounded-lg p-2 text-slate-200 font-racing font-bold text-sm focus:outline-none focus:border-red-500">
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1">60ft Time (sec)</label>
+              <input type="number" step="0.001" id="inputSixtyFoot" placeholder="1.620" class="w-full bg-slate-900 border border-slate-700/80 rounded-lg p-2 text-slate-200 font-racing font-bold text-sm focus:outline-none focus:border-red-500">
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-semibold text-slate-300 mb-1">Tuning Platform & Fuel Blend *</label>
+            <input type="text" id="inputTuneFuel" required placeholder="e.g. JB4 Map 5 + E30 + CPI" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 placeholder-slate-600 focus:outline-none focus:border-red-500">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-300 mb-1">Verification Source *</label>
+            <select id="inputProofType" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 focus:outline-none focus:border-red-500">
+              <option value="Dragy (Valid Slope)">Dragy GPS Validated (under -1.0% slope)</option>
+              <option value="Official Track Slip">Official 1/4 Dragstrip Timeslip</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-300 mb-1">Detailed Mod List & Tires</label>
+          <textarea id="inputMods" rows="2" placeholder="Cold air intakes, CPI fuel injector, secondary cat delete, Lozic TCU, Toyo R888R tires..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 placeholder-slate-600 focus:outline-none focus:border-red-500"></textarea>
+        </div>
+
+        <!-- Simulated file upload dropzone -->
+        <div class="border-2 border-dashed border-slate-800 hover:border-slate-700 rounded-xl p-4 text-center cursor-pointer transition bg-slate-950/40">
+          <i data-lucide="image-plus" class="w-6 h-6 mx-auto text-slate-400 mb-1"></i>
+          <p class="text-slate-300 font-medium">Attach Dragy Screenshot or Timeslip Photo</p>
+          <p class="text-[10px] text-slate-500 mt-0.5">PNG, JPG, or HEIC up to 10MB (Verification Required)</p>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-3">
+          <button type="button" id="btnCancelSubmit" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold transition">Cancel</button>
+          <button type="submit" class="px-5 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white font-semibold shadow-lg shadow-red-700/30 transition flex items-center gap-1.5">
+            <i data-lucide="check" class="w-4 h-4"></i> Submit to Leaderboard
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 bg-slate-900 border border-emerald-500/50 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3">
+    <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400"></i>
+    <span id="toastMsg" class="text-xs font-semibold">Run successfully submitted!</span>
+  </div>
+
+  <script>
+    // Initial Realistic Seed Dataset for the 3.3T Lambda II Platform
+    const INITIAL_RUNS = [
+      {
+        id: "run-001",
+        driver: "Marcus 'BoostedG70' Vance",
+        handle: "@boosted_vance_g70",
+        chassis: "Genesis G70",
+        drivetrain: "AWD",
+        classType: "Upgraded Turbo",
+        quarter: 9.872,
+        trap: 142.10,
+        sixtyFoot: 1.485,
+        threeThirty: 4.120,
+        eighth: 6.340,
+        sixtyToOneThirty: 6.42,
+        zeroToSixty: 2.38,
+        fuelTune: "Pure Turbos + E85 + Lozic Stg 3 TCU",
+        hardware: "Pure Stage 2 turbos, Wagner Intercooler, BMS CPI kit, Lozic TCU, Custom ECU flash",
+        tires: "Toyo Proxes R888R 275/35/19",
+        da: "-340 ft",
+        slope: "-0.32%",
+        proofType: "Dragy",
+        date: "2026-02-18",
+        verified: true
+      },
+      {
+        id: "run-002",
+        driver: "Derrick Song",
+        handle: "@kdm_stinger_gt",
+        chassis: "Kia Stinger",
+        drivetrain: "AWD",
+        classType: "Upgraded Turbo",
+        quarter: 10.045,
+        trap: 139.80,
+        sixtyFoot: 1.512,
+        threeThirty: 4.220,
+        eighth: 6.480,
+        sixtyToOneThirty: 6.85,
+        zeroToSixty: 2.45,
+        fuelTune: "ENR Hybrid Turbos + E50 + JB4",
+        hardware: "ENR Hybrids, Injen Cold Air Intakes, BMS Intercooler, BMS CPI, Lozic TCU 3.2",
+        tires: "Mickey Thompson ET Street SS",
+        da: "+110 ft",
+        slope: "-0.54%",
+        proofType: "Dragy",
+        date: "2026-03-02",
+        verified: true
+      },
+      {
+        id: "run-003",
+        driver: "Tyler 'Apex' Evans",
+        handle: "@tyler_apex33",
+        chassis: "Kia Stinger",
+        drivetrain: "RWD",
+        classType: "Upgraded Turbo",
+        quarter: 10.312,
+        trap: 138.45,
+        sixtyFoot: 1.625,
+        threeThirty: 4.390,
+        eighth: 6.690,
+        sixtyToOneThirty: 6.98,
+        zeroToSixty: 2.82,
+        fuelTune: "Pure Turbos + E40 + EK1 ECU Flash",
+        hardware: "Pure Turbos, Snow Performance Stage 2 WMI, Ark Grip Catback, Agency Power downpipes",
+        tires: "Nitto NT555RII Drag Radials",
+        da: "-120 ft",
+        slope: "-0.40%",
+        proofType: "Track Slip",
+        date: "2026-01-14",
+        verified: true
+      },
+      {
+        id: "run-004",
+        driver: "Brandon Hayes",
+        handle: "@stinger_33tt",
+        chassis: "Kia Stinger",
+        drivetrain: "AWD",
+        classType: "Stock Turbo",
+        quarter: 10.640,
+        trap: 129.50,
+        sixtyFoot: 1.545,
+        threeThirty: 4.410,
+        eighth: 6.790,
+        sixtyToOneThirty: 7.74,
+        zeroToSixty: 2.70,
+        fuelTune: "OEM Turbos + E35 + BMS CPI",
+        hardware: "BMS Intakes, Ultimate Performance Intercooler, Secondary downpipes, JB4 Map 5",
+        tires: "Michelin Pilot Sport 4S",
+        da: "+380 ft",
+        slope: "-0.22%",
+        proofType: "Dragy",
+        date: "2026-03-12",
+        verified: true
+      },
+      {
+        id: "run-005",
+        driver: "Kenji Sato",
+        handle: "@g70_shadow",
+        chassis: "Genesis G70",
+        drivetrain: "AWD",
+        classType: "Stock Turbo",
+        quarter: 10.720,
+        trap: 128.90,
+        sixtyFoot: 1.560,
+        threeThirty: 4.460,
+        eighth: 6.840,
+        sixtyToOneThirty: 7.92,
+        zeroToSixty: 2.75,
+        fuelTune: "OEM Turbos + E30 + Lozic ECU/TCU",
+        hardware: "K&N drop-in filters, Velossa Tech Big Mouth snorkels, Lozic 1.5 bar ECU tune",
+        tires: "Continental ExtremeContact Sport 02",
+        da: "-50 ft",
+        slope: "-0.61%",
+        proofType: "Dragy",
+        date: "2026-02-28",
+        verified: true
+      },
+      {
+        id: "run-006",
+        driver: "Dave C. Miller",
+        handle: "@fast_g80_sport",
+        chassis: "Genesis G80",
+        drivetrain: "AWD",
+        classType: "Upgraded Turbo",
+        quarter: 10.890,
+        trap: 127.30,
+        sixtyFoot: 1.590,
+        threeThirty: 4.540,
+        eighth: 6.960,
+        sixtyToOneThirty: 8.20,
+        zeroToSixty: 2.85,
+        fuelTune: "Pure Turbos + 93 Octane + WMI",
+        hardware: "Pure Turbos, AEM Water-Meth Injection, custom dual exhaust, JB4 piggyback",
+        tires: "Michelin Pilot Sport All Season 4",
+        da: "+640 ft",
+        slope: "-0.15%",
+        proofType: "Track Slip",
+        date: "2025-11-20",
+        verified: true
+      },
+      {
+        id: "run-007",
+        driver: "Carlos Ramirez",
+        handle: "@rwd_stinger_carlos",
+        chassis: "Kia Stinger",
+        drivetrain: "RWD",
+        classType: "Stock Turbo",
+        quarter: 11.080,
+        trap: 126.70,
+        sixtyFoot: 1.710,
+        threeThirty: 4.650,
+        eighth: 7.120,
+        sixtyToOneThirty: 8.35,
+        zeroToSixty: 3.20,
+        fuelTune: "OEM Turbos + 93 Octane + JB4",
+        hardware: "BMS Intakes, HKS M45iL Spark Plugs, MBRP Catback Exhaust",
+        tires: "Falken Azenis RT660",
+        da: "+210 ft",
+        slope: "-0.38%",
+        proofType: "Dragy",
+        date: "2026-03-08",
+        verified: true
+      },
+      {
+        id: "run-008",
+        driver: "Jason Thorne",
+        handle: "@g70_sleeper",
+        chassis: "Genesis G70",
+        drivetrain: "RWD",
+        classType: "Stock Turbo",
+        quarter: 11.190,
+        trap: 125.40,
+        sixtyFoot: 1.740,
+        threeThirty: 4.710,
+        eighth: 7.210,
+        sixtyToOneThirty: 8.52,
+        zeroToSixty: 3.35,
+        fuelTune: "OEM Turbos + E30 Blend",
+        hardware: "AEM Intakes, Velossa snorkels, Lap3 ECU stage 1.5",
+        tires: "Firestone Firehawk Indy 500",
+        da: "-40 ft",
+        slope: "-0.05%",
+        proofType: "Dragy",
+        date: "2026-01-30",
+        verified: true
+      },
+      {
+        id: "run-009",
+        driver: "Arthur Pendelton",
+        handle: "@executive_g80",
+        chassis: "Genesis G80",
+        drivetrain: "AWD",
+        classType: "Stock Turbo",
+        quarter: 11.750,
+        trap: 119.80,
+        sixtyFoot: 1.720,
+        threeThirty: 4.950,
+        eighth: 7.560,
+        sixtyToOneThirty: 9.90,
+        zeroToSixty: 3.65,
+        fuelTune: "OEM 93 Octane + JB4 Map 2",
+        hardware: "Drop-in filters, upgraded spark plugs",
+        tires: "OEM Michelin Primacy Tour",
+        da: "+450 ft",
+        slope: "-0.18%",
+        proofType: "Dragy",
+        date: "2025-10-18",
+        verified: true
+      }
+    ];
+
+    // State Variables
+    let runs = [];
+    let currentMetric = 'quarter'; // 'quarter', 'sixtyToOneThirty', 'eighth', 'zeroToSixty'
+    let currentChassis = 'ALL';
+    let currentDrivetrain = 'ALL';
+    let currentClass = 'ALL';
+    let currentSearch = '';
+
+    function loadRuns() {
+      try {
+        const stored = localStorage.getItem('lambda_33t_leaderboard_data');
+        if (stored) {
+          runs = JSON.parse(stored);
+        } else {
+          runs = [...INITIAL_RUNS];
+          localStorage.setItem('lambda_33t_leaderboard_data', JSON.stringify(runs));
+        }
+      } catch (err) {
+        console.warn('LocalStorage error, using memory fallback:', err);
+        runs = [...INITIAL_RUNS];
+      }
+      updateStats();
+      renderTable();
+    }
+
+    function saveRuns() {
+      try {
+        localStorage.setItem('lambda_33t_leaderboard_data', JSON.stringify(runs));
+      } catch (err) {
+        console.warn('Failed to save to localStorage:', err);
+      }
+      updateStats();
+      renderTable();
+    }
+
+    function updateStats() {
+      if (!runs.length) return;
+      
+      // Best 1/4 Mile
+      const sortedQuarter = [...runs].sort((a, b) => a.quarter - b.quarter);
+      if (sortedQuarter.length > 0) {
+        const best = sortedQuarter[0];
+        document.getElementById('statRecordQuarter').textContent = `${best.quarter.toFixed(3)}s @ ${best.trap.toFixed(1)} mph`;
+      }
+
+      // Fastest 60-130
+      const runsWith60130 = runs.filter(r => r.sixtyToOneThirty && r.sixtyToOneThirty > 0);
+      if (runsWith60130.length > 0) {
+        const best60130 = runsWith60130.sort((a, b) => a.sixtyToOneThirty - b.sixtyToOneThirty)[0];
+        document.getElementById('statRecordSixty').textContent = `${best60130.sixtyToOneThirty.toFixed(2)}s`;
+      }
+
+      document.getElementById('statActiveCount').textContent = `${runs.length} Entries`;
+    }
+
+    function getFilteredAndSortedRuns() {
+      return runs.filter(run => {
+        // Chassis
+        if (currentChassis !== 'ALL' && run.chassis !== currentChassis) return false;
+        // Drivetrain
+        if (currentDrivetrain !== 'ALL' && run.drivetrain !== currentDrivetrain) return false;
+        // Class
+        if (currentClass !== 'ALL' && run.classType !== currentClass) return false;
+        // Search
+        if (currentSearch.trim() !== '') {
+          const q = currentSearch.toLowerCase();
+          const matchDriver = run.driver.toLowerCase().includes(q);
+          const matchHandle = run.handle.toLowerCase().includes(q);
+          const matchFuel = run.fuelTune.toLowerCase().includes(q);
+          const matchChassis = run.chassis.toLowerCase().includes(q);
+          if (!matchDriver && !matchHandle && !matchFuel && !matchChassis) return false;
+        }
+        return true;
+      }).sort((a, b) => {
+        // Sort strictly based on active metric (lowest ET is best)
+        if (currentMetric === 'quarter') return a.quarter - b.quarter;
+        if (currentMetric === 'sixtyToOneThirty') return (a.sixtyToOneThirty || 999) - (b.sixtyToOneThirty || 999);
+        if (currentMetric === 'eighth') return (a.eighth || 999) - (b.eighth || 999);
+        if (currentMetric === 'zeroToSixty') return (a.zeroToSixty || 999) - (b.zeroToSixty || 999);
+        return a.quarter - b.quarter;
+      });
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('leaderboardBody');
+      const noResults = document.getElementById('noResults');
+      const filtered = getFilteredAndSortedRuns();
+
+      // Update table header text based on metric
+      const thMetric = document.getElementById('tableHeaderMetric');
+      if (currentMetric === 'quarter') thMetric.textContent = '1/4 Mile ET';
+      else if (currentMetric === 'sixtyToOneThirty') thMetric.textContent = '60–130 Time';
+      else if (currentMetric === 'eighth') thMetric.textContent = '1/8 Mile ET';
+      else if (currentMetric === 'zeroToSixty') thMetric.textContent = '0–60 Time';
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '';
+        noResults.classList.remove('hidden');
+        return;
+      }
+
+      noResults.classList.add('hidden');
+
+      let html = '';
+      filtered.forEach((run, index) => {
+        const rank = index + 1;
+        
+        // Rank Badge
+        let rankBadge = `<span class="font-racing font-bold text-slate-400 text-base">#${rank}</span>`;
+        if (rank === 1) {
+          rankBadge = `<div class="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-600 to-yellow-400 text-black font-racing font-extrabold text-sm flex items-center justify-center shadow-lg shadow-yellow-500/30 mx-auto">1</div>`;
+        } else if (rank === 2) {
+          rankBadge = `<div class="w-8 h-8 rounded-full bg-gradient-to-tr from-slate-400 to-slate-200 text-black font-racing font-extrabold text-sm flex items-center justify-center shadow-md mx-auto">2</div>`;
+        } else if (rank === 3) {
+          rankBadge = `<div class="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-800 to-amber-600 text-white font-racing font-extrabold text-sm flex items-center justify-center shadow-md mx-auto">3</div>`;
+        }
+
+        // Chassis Badge
+        let chassisBadge = '';
+        if (run.chassis === 'Genesis G70') {
+          chassisBadge = `<span class="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-red-950/60 text-red-300 border border-red-800/40">G70 3.3T</span>`;
+        } else if (run.chassis === 'Kia Stinger') {
+          chassisBadge = `<span class="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-800/80 text-white border border-slate-700/60">Stinger GT</span>`;
+        } else {
+          chassisBadge = `<span class="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-blue-950/60 text-blue-300 border border-blue-800/40">G80 Sport</span>`;
+        }
+
+        // Drivetrain Badge
+        const driveBadge = run.drivetrain === 'AWD' 
+          ? `<span class="px-2 py-0.5 rounded text-[11px] font-bold bg-cyan-950/80 text-cyan-400 border border-cyan-800/40">AWD</span>`
+          : `<span class="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-950/80 text-amber-400 border border-amber-800/40">RWD</span>`;
+
+        // Metric Display
+        let primaryMetricVal = '';
+        if (currentMetric === 'quarter') {
+          primaryMetricVal = `${run.quarter.toFixed(3)}s`;
+        } else if (currentMetric === 'sixtyToOneThirty') {
+          primaryMetricVal = run.sixtyToOneThirty ? `${run.sixtyToOneThirty.toFixed(2)}s` : '--';
+        } else if (currentMetric === 'eighth') {
+          primaryMetricVal = run.eighth ? `${run.eighth.toFixed(3)}s` : '--';
+        } else if (currentMetric === 'zeroToSixty') {
+          primaryMetricVal = run.zeroToSixty ? `${run.zeroToSixty.toFixed(2)}s` : '--';
+        }
+
+        html += `
+          <tr class="hover:bg-slate-800/40 transition-colors group">
+            <td class="py-4 px-4 sm:px-6 text-center">${rankBadge}</td>
+            <td class="py-4 px-4">
+              <div class="font-bold text-white group-hover:text-red-400 transition-colors flex items-center gap-1.5">
+                ${escapeHtml(run.driver)}
+              </div>
+              <div class="text-xs text-slate-400 font-mono flex items-center gap-1">
+                <span>${escapeHtml(run.handle)}</span>
+              </div>
+            </td>
+            <td class="py-4 px-4 whitespace-nowrap">${chassisBadge}</td>
+            <td class="py-4 px-4 text-center whitespace-nowrap">${driveBadge}</td>
+            <td class="py-4 px-4 whitespace-nowrap">
+              <span class="font-racing text-lg font-bold text-white tracking-wide">${primaryMetricVal}</span>
+            </td>
+            <td class="py-4 px-4 whitespace-nowrap">
+              <span class="font-racing text-sm font-semibold text-slate-300">${run.trap.toFixed(1)} <span class="text-[10px] text-slate-500">MPH</span></span>
+            </td>
+            <td class="py-4 px-4 hidden md:table-cell whitespace-nowrap font-racing text-slate-300">
+              ${run.sixtyFoot ? `${run.sixtyFoot.toFixed(3)}s` : '--'}
+            </td>
+            <td class="py-4 px-4 hidden lg:table-cell max-w-xs truncate">
+              <span class="text-xs text-slate-300 font-medium block truncate">${escapeHtml(run.fuelTune)}</span>
+              <span class="text-[11px] text-slate-400">${escapeHtml(run.classType)}</span>
+            </td>
+            <td class="py-4 px-4 text-center whitespace-nowrap">
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" title="${run.proofType} verified">
+                <i data-lucide="check-circle" class="w-3 h-3"></i> ${run.proofType}
+              </span>
+            </td>
+            <td class="py-4 px-4 text-right whitespace-nowrap">
+              <button onclick="openSlipModal('${run.id}')" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-medium text-xs transition border border-slate-700/60 inline-flex items-center gap-1.5">
+                <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                <span class="hidden sm:inline">Slip & Specs</span>
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+
+      tbody.innerHTML = html;
+      lucide.createIcons();
+    }
+
+    // Helper: Escape text to prevent XSS
+    function escapeHtml(string) {
+      if (!string) return '';
+      return String(string)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    window.openSlipModal = function(runId) {
+      const run = runs.find(r => r.id === runId);
+      if (!run) return;
+
+      const filtered = getFilteredAndSortedRuns();
+      const rankIndex = filtered.findIndex(r => r.id === runId);
+      const displayRank = rankIndex !== -1 ? `#${rankIndex + 1}` : '#--';
+
+      document.getElementById('modalRankBadge').textContent = displayRank;
+      document.getElementById('modalDriverName').textContent = run.driver;
+      document.getElementById('modalVehicleSubtitle').textContent = `${run.chassis} • ${run.drivetrain} • ${run.classType}`;
+      document.getElementById('modalRunDate').textContent = `${run.date || '2026'} • Verified Run`;
+      
+      document.getElementById('modal60ft').textContent = run.sixtyFoot ? `${run.sixtyFoot.toFixed(3)}s` : '1.580s';
+      document.getElementById('modal330ft').textContent = run.threeThirty ? `${run.threeThirty.toFixed(3)}s` : '4.350s';
+      document.getElementById('modalEighth').textContent = run.eighth ? `${run.eighth.toFixed(3)}s @ ${(run.trap * 0.78).toFixed(1)}` : '6.75s @ 104';
+      document.getElementById('modalSixtyToHundredThirty').textContent = run.sixtyToOneThirty ? `${run.sixtyToOneThirty.toFixed(2)}s` : '7.85s';
+
+      document.getElementById('modalQuarterTime').textContent = `${run.quarter.toFixed(3)}s`;
+      document.getElementById('modalTrapSpeed').innerHTML = `${run.trap.toFixed(2)} <span class="text-lg font-normal text-slate-400">MPH</span>`;
+      
+      document.getElementById('modalDA').textContent = run.da || '-80 ft';
+      document.getElementById('modalSlope').textContent = `${run.slope || '-0.35%'} (Legal)`;
+      document.getElementById('modalTires').textContent = run.tires || 'Performance Radial';
+
+      document.getElementById('modalTuning').textContent = run.fuelTune || 'JB4 + High Octane';
+      document.getElementById('modalFuel').textContent = run.fuelTune ? run.fuelTune.split('+')[1] || run.fuelTune : 'E30 Mix';
+      document.getElementById('modalTurbos').textContent = run.classType === 'Stock Turbo' ? 'OEM Lambda II Twin Turbos' : 'Upgraded Pure / ENR Turbos';
+      document.getElementById('modalHardware').textContent = run.hardware || 'Aftermarket Downpipes, Front-Mount Intercooler, High Flow Cold Air Intakes';
+
+      document.getElementById('modalDriverHandle').textContent = run.handle;
+
+      const modal = document.getElementById('slipModal');
+      modal.classList.remove('hidden');
+      lucide.createIcons();
+    };
+
+    function closeSlipModal() {
+      document.getElementById('slipModal').classList.add('hidden');
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      
+      const newRun = {
+        id: 'run-' + Date.now(),
+        driver: document.getElementById('inputDriver').value.trim(),
+        handle: document.getElementById('inputHandle').value.trim() || '@kdm_owner',
+        chassis: document.getElementById('inputChassis').value,
+        drivetrain: document.getElementById('inputDrive').value,
+        classType: document.getElementById('inputClass').value,
+        quarter: parseFloat(document.getElementById('inputQuarter').value),
+        trap: parseFloat(document.getElementById('inputTrap').value),
+        sixtyToOneThirty: parseFloat(document.getElementById('inputSixtyToOneThirty').value) || null,
+        sixtyFoot: parseFloat(document.getElementById('inputSixtyFoot').value) || null,
+        threeThirty: null,
+        eighth: null,
+        zeroToSixty: null,
+        fuelTune: document.getElementById('inputTuneFuel').value.trim(),
+        hardware: document.getElementById('inputMods').value.trim() || 'Intakes and Downpipes',
+        tires: 'Drag Radials / Performance Sport',
+        da: '-45 ft',
+        slope: '-0.25%',
+        proofType: document.getElementById('inputProofType').value.includes('Dragy') ? 'Dragy' : 'Track Slip',
+        date: new Date().toISOString().split('T')[0],
+        verified: true
+      };
+
+      // Approximate 1/8th and 330ft if not directly provided
+      if (newRun.quarter) {
+        newRun.eighth = parseFloat((newRun.quarter * 0.638).toFixed(3));
+        newRun.threeThirty = parseFloat((newRun.quarter * 0.415).toFixed(3));
+        newRun.zeroToSixty = parseFloat((newRun.quarter * 0.255).toFixed(2));
+      }
+
+      runs.unshift(newRun);
+      saveRuns();
+
+      // Reset form and close modal
+      document.getElementById('submitRunForm').reset();
+      document.getElementById('submitModal').classList.add('hidden');
+
+      // Show toast
+      showToast(`Run logged! ${newRun.driver} is ranked on the board.`);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 3500);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadRuns();
+      lucide.createIcons();
+
+      // Metric Selector tabs
+      document.querySelectorAll('.metric-tab').forEach(tab => {
+        tab.addEventListener('click', (e) => {
+          document.querySelectorAll('.metric-tab').forEach(b => {
+            b.classList.remove('bg-red-600', 'text-white', 'shadow-md', 'shadow-red-900/30');
+            b.classList.add('text-slate-400', 'hover:text-white', 'hover:bg-slate-800/60');
+          });
+          tab.classList.add('bg-red-600', 'text-white', 'shadow-md', 'shadow-red-900/30');
+          tab.classList.remove('text-slate-400', 'hover:text-white', 'hover:bg-slate-800/60');
+          
+          currentMetric = tab.getAttribute('data-metric');
+          renderTable();
+        });
+      });
+
+      // Chassis filter pills
+      document.querySelectorAll('.chassis-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+          document.querySelectorAll('.chassis-pill').forEach(p => {
+            p.classList.remove('bg-slate-800', 'text-white', 'border-slate-700');
+            p.classList.add('bg-slate-950/70', 'text-slate-400', 'border-slate-800');
+          });
+          pill.classList.add('bg-slate-800', 'text-white', 'border-slate-700');
+          pill.classList.remove('bg-slate-950/70', 'text-slate-400', 'border-slate-800');
+          
+          currentChassis = pill.getAttribute('data-chassis');
+          renderTable();
+        });
+      });
+
+      // Drivetrain filter pills
+      document.querySelectorAll('.drive-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+          document.querySelectorAll('.drive-pill').forEach(p => {
+            p.classList.remove('bg-slate-800', 'text-white', 'border-slate-700');
+            p.classList.add('bg-slate-950/70', 'border-slate-800');
+          });
+          pill.classList.add('bg-slate-800', 'text-white', 'border-slate-700');
+          pill.classList.remove('bg-slate-950/70', 'border-slate-800');
+          
+          currentDrivetrain = pill.getAttribute('data-drive');
+          renderTable();
+        });
+      });
+
+      // Class filter dropdown
+      document.getElementById('classFilter').addEventListener('change', (e) => {
+        currentClass = e.target.value;
+        renderTable();
+      });
+
+      // Search input
+      document.getElementById('searchInput').addEventListener('input', (e) => {
+        currentSearch = e.target.value;
+        renderTable();
+      });
+
+      // Reset filters button
+      document.getElementById('btnResetFilters').addEventListener('click', () => {
+        currentChassis = 'ALL';
+        currentDrivetrain = 'ALL';
+        currentClass = 'ALL';
+        currentSearch = '';
+        document.getElementById('searchInput').value = '';
+        document.getElementById('classFilter').value = 'ALL';
+        
+        // Reset pills UI
+        document.querySelectorAll('.chassis-pill').forEach((p, idx) => {
+          if (idx === 0) p.classList.add('bg-slate-800', 'text-white');
+          else p.classList.remove('bg-slate-800', 'text-white');
+        });
+        document.querySelectorAll('.drive-pill').forEach((p, idx) => {
+          if (idx === 0) p.classList.add('bg-slate-800', 'text-white');
+          else p.classList.remove('bg-slate-800', 'text-white');
+        });
+
+        renderTable();
+      });
+
+      // Modals
+      document.getElementById('btnCloseSlipModal').addEventListener('click', closeSlipModal);
+      document.getElementById('slipModal').addEventListener('click', (e) => {
+        if (e.target.id === 'slipModal') closeSlipModal();
+      });
+
+      document.getElementById('btnOpenSubmit').addEventListener('click', () => {
+        document.getElementById('submitModal').classList.remove('hidden');
+      });
+      document.getElementById('btnCloseSubmitModal').addEventListener('click', () => {
+        document.getElementById('submitModal').classList.add('hidden');
+      });
+      document.getElementById('btnCancelSubmit').addEventListener('click', () => {
+        document.getElementById('submitModal').classList.add('hidden');
+      });
+      document.getElementById('submitModal').addEventListener('click', (e) => {
+        if (e.target.id === 'submitModal') document.getElementById('submitModal').classList.add('hidden');
+      });
+
+      document.getElementById('submitRunForm').addEventListener('submit', handleFormSubmit);
+
+      // Copy link button inside slip modal
+      document.getElementById('btnCopyRecord').addEventListener('click', () => {
+        const dummyInput = document.createElement('input');
+        dummyInput.value = window.location.href;
+        document.body.appendChild(dummyInput);
+        dummyInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(dummyInput);
+        showToast('Link copied to clipboard!');
+      });
+    });
+  </script>
+</body>
+</html>
