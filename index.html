@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>3.3T Lambda II Platform Leaderboard | G70 • Stinger • G80</title>
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Phosphor Icons for automotive UI aesthetic -->
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
     body {
@@ -40,7 +40,7 @@
 </head>
 <body class="min-h-screen flex flex-col selection:bg-red-600 selection:text-white carbon-mesh">
 
-  <!-- Header & Navigation -->
+  <!-- Header -->
   <header class="border-b border-neutral-800/80 bg-neutral-950/80 backdrop-blur-md sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
       <div class="flex items-center space-x-3">
@@ -81,13 +81,13 @@
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
           </span>
-          <span class="text-xs uppercase font-mono tracking-wider text-emerald-400 font-semibold">Official Platform Database</span>
+          <span class="text-xs uppercase font-mono tracking-wider text-emerald-400 font-semibold">Live Database Connected</span>
         </div>
         <h1 class="text-xl md:text-2xl font-black tracking-tight text-white">
           Verified 3.3T G-DI Twin Turbo Rankings
         </h1>
         <p class="text-xs md:text-sm text-neutral-400 max-w-2xl">
-          Tracking the fastest 1/4 mile, 60–130 mph, 1/8 mile, and 0–60 runs across G70, Stinger GT, and G80 platforms. Verified via Dragy GPS or physical track slips.
+          Tracking the fastest 1/4 mile, 60–130 mph, 1/8 mile, and 0–60 runs across G70, Stinger GT, and G80 platforms. Verified via Dragy GPS or track slips.
         </p>
       </div>
 
@@ -120,9 +120,6 @@
         <button onclick="setMetric('eighth')" id="btn-metric-eighth" class="metric-tab px-3.5 py-1.5 rounded-lg text-xs font-medium text-neutral-400 hover:text-white transition">
           1/8 Mile
         </button>
-        <button onclick="setMetric('zeroSixty')" id="btn-metric-zeroSixty" class="metric-tab px-3.5 py-1.5 rounded-lg text-xs font-medium text-neutral-400 hover:text-white transition">
-          0 – 60 mph
-        </button>
       </div>
 
       <div class="relative w-full sm:w-64">
@@ -131,9 +128,8 @@
       </div>
     </div>
 
-    <!-- Secondary Filters: Chassis, Drivetrain, Turbo Class -->
+    <!-- Secondary Filters: Chassis, Drivetrain, Turbo Setup -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-      <!-- Chassis Filter -->
       <div class="bg-neutral-900/50 border border-neutral-800/80 rounded-xl p-2.5 flex items-center space-x-2">
         <span class="text-[11px] font-mono text-neutral-400 uppercase tracking-wider pl-1">Chassis:</span>
         <select id="filter-chassis" onchange="renderTable()" class="bg-neutral-950 border border-neutral-800 text-neutral-200 text-xs rounded-lg px-2.5 py-1 flex-1 focus:outline-none focus:border-red-500">
@@ -144,7 +140,6 @@
         </select>
       </div>
 
-      <!-- Drivetrain Filter -->
       <div class="bg-neutral-900/50 border border-neutral-800/80 rounded-xl p-2.5 flex items-center space-x-2">
         <span class="text-[11px] font-mono text-neutral-400 uppercase tracking-wider pl-1">Drivetrain:</span>
         <select id="filter-drivetrain" onchange="renderTable()" class="bg-neutral-950 border border-neutral-800 text-neutral-200 text-xs rounded-lg px-2.5 py-1 flex-1 focus:outline-none focus:border-red-500">
@@ -154,7 +149,6 @@
         </select>
       </div>
 
-      <!-- Turbo / Build Class -->
       <div class="bg-neutral-900/50 border border-neutral-800/80 rounded-xl p-2.5 flex items-center space-x-2">
         <span class="text-[11px] font-mono text-neutral-400 uppercase tracking-wider pl-1">Turbo Setup:</span>
         <select id="filter-class" onchange="renderTable()" class="bg-neutral-950 border border-neutral-800 text-neutral-200 text-xs rounded-lg px-2.5 py-1 flex-1 focus:outline-none focus:border-red-500">
@@ -166,10 +160,8 @@
       </div>
     </div>
 
-    <!-- Podium Component (Top 3 for active metric) -->
-    <div id="podium-container" class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
-      <!-- Populated via JS -->
-    </div>
+    <!-- Podium -->
+    <div id="podium-container" class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1"></div>
 
     <!-- Rankings Table Card -->
     <div class="bg-neutral-900/70 border border-neutral-800 rounded-2xl overflow-hidden shadow-2xl backdrop-blur-sm">
@@ -187,17 +179,14 @@
               <th scope="col" class="py-3.5 px-4 text-center">Details</th>
             </tr>
           </thead>
-          <tbody id="table-body" class="divide-y divide-neutral-800/60 font-medium">
-            <!-- Populated via JS -->
-          </tbody>
+          <tbody id="table-body" class="divide-y divide-neutral-800/60 font-medium"></tbody>
         </table>
       </div>
       
-      <!-- Empty State -->
       <div id="empty-state" class="hidden py-16 text-center text-neutral-500 space-y-2">
         <i class="ph ph-traffic-cone text-4xl text-neutral-600 mb-2"></i>
-        <p class="text-sm font-semibold text-neutral-300">No verified runs found matching filters</p>
-        <p class="text-xs text-neutral-500">Be the first to submit a verified time for this configuration!</p>
+        <p class="text-sm font-semibold text-neutral-300">No verified runs found</p>
+        <p class="text-xs text-neutral-500">Be the first to submit a verified time!</p>
         <button onclick="openSubmitModal()" class="mt-3 px-3 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-xs rounded-lg transition">
           Submit Run
         </button>
@@ -205,17 +194,14 @@
     </div>
   </main>
 
-  <!-- Footer -->
   <footer class="border-t border-neutral-800 bg-neutral-950 py-6 text-center text-xs text-neutral-500 space-y-1">
     <p>3.3T Lambda II Community Drag & Roll Leaderboard</p>
     <p class="text-[11px] text-neutral-600">Built for Genesis G70, Kia Stinger GT & Genesis G80 enthusiasts</p>
   </footer>
 
-  <!-- Modal: View Slip & Specs (With Car Photo Header) -->
+  <!-- Modal: View Slip & Specs -->
   <div id="details-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center z-50 p-4">
     <div class="bg-neutral-900 border border-neutral-700/80 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-150">
-      
-      <!-- Car Image Banner -->
       <div id="modal-car-photo-container" class="relative w-full h-44 bg-neutral-950 overflow-hidden border-b border-neutral-800 flex items-center justify-center">
         <img id="modal-car-photo" src="" alt="Car Image" class="w-full h-full object-cover hidden">
         <div id="modal-no-photo-placeholder" class="text-center text-neutral-600">
@@ -238,12 +224,11 @@
       </div>
 
       <div class="p-6 space-y-5 max-h-[60vh] overflow-y-auto">
-        <!-- Timeslip Summary Card (Dragy style simulated card) -->
         <div class="bg-neutral-950 border border-neutral-800 rounded-xl p-4 font-mono space-y-3">
           <div class="flex items-center justify-between text-xs text-neutral-400 border-b border-neutral-800 pb-2">
             <span class="flex items-center space-x-1.5 text-emerald-400">
               <i class="ph-fill ph-check-circle"></i>
-              <span id="modal-verified-status">Verified Dragy GPS (Valid Slope)</span>
+              <span id="modal-verified-status">Verified Dragy GPS</span>
             </span>
             <span id="modal-date" class="text-[11px] text-neutral-500">Verified Run</span>
           </div>
@@ -261,8 +246,7 @@
             </div>
           </div>
 
-          <!-- Drag Split Metrics -->
-          <div class="grid grid-cols-3 gap-2 text-center text-xs pt-1 border-t border-neutral-800/80">
+          <div class="grid grid-cols-2 gap-2 text-center text-xs pt-1 border-t border-neutral-800/80">
             <div>
               <span class="text-[10px] text-neutral-500 block">60 FT</span>
               <span id="modal-sixty" class="font-bold text-neutral-200">--</span>
@@ -271,18 +255,13 @@
               <span class="text-[10px] text-neutral-500 block">1/8 MILE</span>
               <span id="modal-eighth" class="font-bold text-neutral-200">--</span>
             </div>
-            <div>
-              <span class="text-[10px] text-neutral-500 block">0 - 60</span>
-              <span id="modal-zerosixty" class="font-bold text-neutral-200">--</span>
-            </div>
           </div>
         </div>
 
-        <!-- Vehicle Modification Specs -->
         <div class="space-y-3">
           <h4 class="text-xs font-mono uppercase tracking-wider text-neutral-400 flex items-center space-x-1.5">
             <i class="ph-bold ph-wrench text-red-500"></i>
-            <span>Build Specs & Hardware</span>
+            <span>Build Specs</span>
           </h4>
           <div class="grid grid-cols-2 gap-2 text-xs">
             <div class="bg-neutral-950/60 border border-neutral-800 p-2.5 rounded-lg">
@@ -298,13 +277,13 @@
               <span id="modal-turbos" class="text-neutral-200 font-semibold">--</span>
             </div>
             <div class="bg-neutral-950/60 border border-neutral-800 p-2.5 rounded-lg">
-              <span class="text-neutral-500 text-[10px] block">Tires / Setup</span>
+              <span class="text-neutral-500 text-[10px] block">Tires</span>
               <span id="modal-tires" class="text-neutral-200 font-semibold">--</span>
             </div>
           </div>
 
           <div class="bg-neutral-950/60 border border-neutral-800 p-2.5 rounded-lg text-xs">
-            <span class="text-neutral-500 text-[10px] block mb-1">Additional Bolt-ons & Notes</span>
+            <span class="text-neutral-500 text-[10px] block mb-1">Modifications</span>
             <p id="modal-notes" class="text-neutral-300 leading-relaxed">--</p>
           </div>
         </div>
@@ -332,7 +311,6 @@
       </div>
 
       <form id="submit-run-form" onsubmit="handleFormSubmit(event)" class="p-6 space-y-4 max-h-[75vh] overflow-y-auto text-xs">
-        <!-- Driver Info -->
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-neutral-400 mb-1 font-mono text-[11px]">Driver / Handle *</label>
@@ -340,7 +318,7 @@
           </div>
           <div>
             <label class="block text-neutral-400 mb-1 font-mono text-[11px]">Platform Chassis *</label>
-            <select id="form-chassis" required class="w-full bg-neutral-950 border border-neutral-800 rounded-lg p-2 text-white focus:outline-none focus:border-red-500">
+            <select id="form-chassis" required class="w-full bg-neutral-950 border border-neutral-800 rounded-lg p-2 text-white">
               <option value="G70">Genesis G70 (3.3T)</option>
               <option value="Stinger">Kia Stinger GT (3.3T)</option>
               <option value="G80">Genesis G80 (3.3T)</option>
@@ -351,14 +329,14 @@
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-neutral-400 mb-1 font-mono text-[11px]">Drivetrain *</label>
-            <select id="form-drivetrain" required class="w-full bg-neutral-950 border border-neutral-800 rounded-lg p-2 text-white focus:outline-none focus:border-red-500">
+            <select id="form-drivetrain" required class="w-full bg-neutral-950 border border-neutral-800 rounded-lg p-2 text-white">
               <option value="AWD">AWD (All-Wheel Drive)</option>
               <option value="RWD">RWD (Rear-Wheel Drive)</option>
             </select>
           </div>
           <div>
             <label class="block text-neutral-400 mb-1 font-mono text-[11px]">Turbo Setup *</label>
-            <select id="form-class" required class="w-full bg-neutral-950 border border-neutral-800 rounded-lg p-2 text-white focus:outline-none focus:border-red-500">
+            <select id="form-class" required class="w-full bg-neutral-950 border border-neutral-800 rounded-lg p-2 text-white">
               <option value="Stock Turbos">Stock Turbos</option>
               <option value="Hybrid Turbos">Hybrid Turbos</option>
               <option value="Upgraded / Big Turbos">Upgraded / Big Turbos</option>
@@ -366,412 +344,10 @@
           </div>
         </div>
 
-        <!-- Times and Speeds -->
         <div class="p-3 bg-neutral-950/70 border border-neutral-800 rounded-xl space-y-3">
           <span class="text-[11px] font-mono text-red-400 uppercase tracking-wide block font-bold">Performance Times</span>
           
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block text-neutral-400 mb-1">1/4 Mile ET (seconds) *</label>
-              <input type="number" step="0.001" id="form-quarter" required placeholder="10.850" class="w-full bg-neutral-900 border border-neutral-800 rounded-lg p-2 text-white font-mono focus:border-red-500">
-            </div>
-            <div>
-              <label class="block text-neutral-400 mb-1">1/4 Mile Trap (MPH) *</label>
-              <input type="number" step="0.01" id="form-trap" required placeholder="128.4" class="w-full bg-neutral-900 border border-neutral-800 rounded-lg p-2 text-white font-mono focus:border-red-500">
-            </div>
-          </div>
-
-          <div class="grid grid-cols-3 gap-2">
-            <div>
-              <label class="block text-neutral-400 mb-1">60-130 MPH</label>
-              <input type="number" step="0.01" id="form-roll" placeholder="7.82" class="w-full bg-neutral-900 border border-neutral-800 rounded-lg p-2 text-white font-mono focus:border-red-500">
-            </div>
-            <div>
-              <label class="block text-neutral-400 mb-1">60 Foot</label>
-              <input type="number" step="0.001" id="form-sixty" placeholder="1.58" class="w-full bg-neutral-900 border border-neutral-800 rounded-lg p-2 text-white font-mono focus:border-red-500">
-            </div>
-            <div>
-              <label class="block text-neutral-400 mb-1">1/8 Mile ET</label>
-              <input type="number" step="0.001" id="form-eighth" placeholder="6.98" class="w-full bg-neutral-900 border border-neutral-800 rounded-lg p-2 text-white font-mono focus:border-red-500">
-            </div>
-          </div>
-        </div>
-
-        <!-- Mods & Setup -->
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-neutral-400 mb-1">Fuel / CPI / Meth</label>
-            <input type="text" id="form-fuel" placeholder="e.g. E85 + CPI / 93 Octane" class="w-full bg-neutral-950 border border-neutral-800 rounded-lg p-2 text-white focus:border-red-500">
-          </div>
-          <div>
-            <label class="block text-neutral-400 mb-1">ECU / TCU Tune</label>
-            <input type="text" id="form-tune" placeholder="e.g. JB4 BEF / EK1 / Lozic" class="w-full bg-neutral-950 border border-neutral-800 rounded-lg p-2 text-white focus:border-red-500">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-neutral-400 mb-1">Tires & Modifications</label>
-          <textarea id="form-mods" rows="2" placeholder="e.g. Toyo R888R, Upgraded Intercooler, CPI, Catless secondaries..." class="w-full bg-neutral-950 border border-neutral-800 rounded-lg p-2 text-white focus:border-red-500"></textarea>
-        </div>
-
-        <!-- Car Photo Input -->
-        <div class="p-3 bg-neutral-950/70 border border-neutral-800 rounded-xl space-y-2">
-          <label class="block text-neutral-300 font-mono text-[11px] font-bold">Vehicle Photo (Optional)</label>
-          <p class="text-[10px] text-neutral-500">Upload a picture of the car or paste an image URL:</p>
-          <input type="file" id="form-photo-file" accept="image/*" class="w-full text-xs text-neutral-400 file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-neutral-800 file:text-neutral-200 hover:file:bg-neutral-700 cursor-pointer">
-          <div class="pt-1">
-            <input type="url" id="form-photo-url" placeholder="Or paste an image URL (https://...)" class="w-full bg-neutral-900 border border-neutral-800 rounded-lg p-2 text-white focus:border-red-500 text-xs">
-          </div>
-        </div>
-
-        <div class="p-4 bg-neutral-950 border-t border-neutral-800 flex justify-end space-x-2 pt-4">
-          <button type="button" onclick="closeSubmitModal()" class="px-4 py-2 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-300 font-semibold">
-            Cancel
-          </button>
-          <button type="submit" class="px-5 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white font-semibold shadow-lg shadow-red-900/30">
-            Submit for Ranking
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <script>
-    // Clean initial data
-    const initialData = [];
-
-    // Load persisted submissions or start with empty array
-    let leaderboard = JSON.parse(localStorage.getItem('33t_leaderboard_data')) || initialData;
-
-    let currentMetric = 'quarter'; // 'quarter', 'roll', 'eighth', 'zeroSixty'
-
-    function setMetric(metric) {
-      currentMetric = metric;
-      
-      document.querySelectorAll('.metric-tab').forEach(btn => {
-        btn.classList.remove('bg-red-600', 'text-white', 'shadow');
-        btn.classList.add('text-neutral-400');
-      });
-      const activeBtn = document.getElementById(`btn-metric-${metric}`);
-      if (activeBtn) {
-        activeBtn.classList.remove('text-neutral-400');
-        activeBtn.classList.add('bg-red-600', 'text-white', 'shadow');
-      }
-
-      const thPrimary = document.getElementById('th-primary-metric');
-      const thSec1 = document.getElementById('th-sec-metric-1');
-      const thSec2 = document.getElementById('th-sec-metric-2');
-
-      if (metric === 'quarter') {
-        thPrimary.innerText = '1/4 Mile (ET / Trap)';
-        thSec1.innerText = '60 Ft';
-        thSec2.innerText = '60-130';
-      } else if (metric === 'roll') {
-        thPrimary.innerText = '60 - 130 mph';
-        thSec1.innerText = '1/4 Mile ET';
-        thSec2.innerText = '60 Ft';
-      } else if (metric === 'eighth') {
-        thPrimary.innerText = '1/8 Mile ET';
-        thSec1.innerText = '60 Ft';
-        thSec2.innerText = '1/4 Mile ET';
-      } else if (metric === 'zeroSixty') {
-        thPrimary.innerText = '0 - 60 mph';
-        thSec1.innerText = '60 Ft';
-        thSec2.innerText = '1/4 Mile';
-      }
-
-      renderTable();
-    }
-
-    function getFilteredData() {
-      const chassisFilter = document.getElementById('filter-chassis').value;
-      const drivetrainFilter = document.getElementById('filter-drivetrain').value;
-      const classFilter = document.getElementById('filter-class').value;
-      const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
-
-      return leaderboard.filter(item => {
-        if (chassisFilter !== 'ALL' && item.vehicle !== chassisFilter) return false;
-        if (drivetrainFilter !== 'ALL' && item.drivetrain !== drivetrainFilter) return false;
-        if (classFilter !== 'ALL' && item.class !== classFilter) return false;
-
-        if (searchTerm) {
-          const matchDriver = item.driver.toLowerCase().includes(searchTerm);
-          const matchMods = (item.mods || '').toLowerCase().includes(searchTerm);
-          const matchTune = (item.tune || '').toLowerCase().includes(searchTerm);
-          const matchFuel = (item.fuel || '').toLowerCase().includes(searchTerm);
-          if (!matchDriver && !matchMods && !matchTune && !matchFuel) return false;
-        }
-
-        if (currentMetric === 'quarter' && !item.quarter) return false;
-        if (currentMetric === 'roll' && !item.roll) return false;
-        if (currentMetric === 'eighth' && !item.eighth) return false;
-        if (currentMetric === 'zeroSixty' && !item.zeroSixty) return false;
-
-        return true;
-      }).sort((a, b) => {
-        return (a[currentMetric] || 999) - (b[currentMetric] || 999);
-      });
-    }
-
-    function updateStats() {
-      document.getElementById('stat-total-runs').innerText = leaderboard.length;
-
-      const validQuarter = leaderboard.filter(i => i.quarter).map(i => i.quarter);
-      if (validQuarter.length) {
-        document.getElementById('stat-fastest-quarter').innerText = Math.min(...validQuarter).toFixed(3) + 's';
-      } else {
-        document.getElementById('stat-fastest-quarter').innerText = '--';
-      }
-
-      const validRoll = leaderboard.filter(i => i.roll).map(i => i.roll);
-      if (validRoll.length) {
-        document.getElementById('stat-fastest-roll').innerText = Math.min(...validRoll).toFixed(2) + 's';
-      } else {
-        document.getElementById('stat-fastest-roll').innerText = '--';
-      }
-    }
-
-    function renderPodium(topThree) {
-      const container = document.getElementById('podium-container');
-      container.innerHTML = '';
-
-      if (topThree.length === 0) return;
-
-      const badges = [
-        { rank: 1, label: '1ST PLACE', color: 'from-amber-500/20 to-neutral-900', border: 'border-amber-500/50', text: 'text-amber-400', icon: 'ph-fill ph-crown text-amber-400' },
-        { rank: 2, label: '2ND PLACE', color: 'from-slate-400/20 to-neutral-900', border: 'border-slate-400/40', text: 'text-slate-300', icon: 'ph-fill ph-medal text-slate-300' },
-        { rank: 3, label: '3RD PLACE', color: 'from-amber-700/20 to-neutral-900', border: 'border-amber-700/40', text: 'text-amber-600', icon: 'ph-fill ph-medal text-amber-600' }
-      ];
-
-      topThree.forEach((run, idx) => {
-        const meta = badges[idx];
-        const card = document.createElement('div');
-        card.className = `rounded-xl border ${meta.border} bg-gradient-to-b ${meta.color} p-4 relative overflow-hidden backdrop-blur flex flex-col justify-between`;
-        
-        let primaryMetricDisplay = '';
-        if (currentMetric === 'quarter') primaryMetricDisplay = `${run.quarter.toFixed(3)}s @ ${run.trap} mph`;
-        else if (currentMetric === 'roll') primaryMetricDisplay = `${run.roll.toFixed(2)}s (60-130)`;
-        else if (currentMetric === 'eighth') primaryMetricDisplay = `${run.eighth.toFixed(3)}s (1/8th)`;
-        else if (currentMetric === 'zeroSixty') primaryMetricDisplay = `${run.zeroSixty.toFixed(2)}s (0-60)`;
-
-        card.innerHTML = `
-          <div class="flex items-center justify-between">
-            <span class="text-[10px] font-mono font-black ${meta.text} tracking-wider flex items-center gap-1">
-              <i class="${meta.icon}"></i> ${meta.label}
-            </span>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-neutral-950/80 border border-neutral-800 text-neutral-300">
-              ${run.drivetrain}
-            </span>
-          </div>
-
-          <div class="my-3">
-            <h3 class="text-base font-extrabold text-white truncate">${run.driver}</h3>
-            <p class="text-xs text-neutral-400">${run.vehicle} 3.3T • ${run.class}</p>
-          </div>
-
-          <div class="bg-neutral-950/70 rounded-lg p-2.5 border border-neutral-800/80 flex items-center justify-between">
-            <span class="text-[11px] font-mono text-neutral-400">Time</span>
-            <span class="text-sm font-black font-mono ${meta.text}">${primaryMetricDisplay}</span>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function renderTable() {
-      const filtered = getFilteredData();
-      const tbody = document.getElementById('table-body');
-      const emptyState = document.getElementById('empty-state');
-      tbody.innerHTML = '';
-
-      updateStats();
-
-      if (filtered.length === 0) {
-        emptyState.classList.remove('hidden');
-        renderPodium([]);
-        return;
-      } else {
-        emptyState.classList.add('hidden');
-      }
-
-      renderPodium(filtered.slice(0, 3));
-
-      filtered.forEach((run, index) => {
-        const tr = document.createElement('tr');
-        tr.className = "hover:bg-neutral-800/40 transition border-b border-neutral-800/40";
-
-        let rankBadge = `<span class="font-mono text-neutral-500 font-bold">${index + 1}</span>`;
-        if (index === 0) rankBadge = `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 font-bold font-mono text-xs border border-amber-500/40">1</span>`;
-        if (index === 1) rankBadge = `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-400/20 text-slate-300 font-bold font-mono text-xs border border-slate-400/40">2</span>`;
-        if (index === 2) rankBadge = `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-800/20 text-amber-600 font-bold font-mono text-xs border border-amber-700/40">3</span>`;
-
-        const chassisColor = run.vehicle === 'G70' ? 'text-rose-400 bg-rose-950/40 border-rose-800/50' :
-                             run.vehicle === 'Stinger' ? 'text-amber-400 bg-amber-950/40 border-amber-800/50' :
-                             'text-blue-400 bg-blue-950/40 border-blue-800/50';
-
-        let primaryMetricHtml = '';
-        let secMetric1 = '';
-        let secMetric2 = '';
-
-        if (currentMetric === 'quarter') {
-          primaryMetricHtml = `<span class="text-sm font-black font-mono text-amber-400">${run.quarter ? run.quarter.toFixed(3) : '--'}</span><span class="text-[11px] font-mono text-neutral-400 block">${run.trap ? run.trap + ' mph' : ''}</span>`;
-          secMetric1 = run.sixty ? `${run.sixty.toFixed(3)}s` : '--';
-          secMetric2 = run.roll ? `${run.roll.toFixed(2)}s` : '--';
-        } else if (currentMetric === 'roll') {
-          primaryMetricHtml = `<span class="text-sm font-black font-mono text-cyan-400">${run.roll ? run.roll.toFixed(2) + 's' : '--'}</span>`;
-          secMetric1 = run.quarter ? `${run.quarter.toFixed(3)}s` : '--';
-          secMetric2 = run.sixty ? `${run.sixty.toFixed(3)}s` : '--';
-        } else if (currentMetric === 'eighth') {
-          primaryMetricHtml = `<span class="text-sm font-black font-mono text-red-400">${run.eighth ? run.eighth.toFixed(3) + 's' : '--'}</span>`;
-          secMetric1 = run.sixty ? `${run.sixty.toFixed(3)}s` : '--';
-          secMetric2 = run.quarter ? `${run.quarter.toFixed(3)}s` : '--';
-        } else if (currentMetric === 'zeroSixty') {
-          primaryMetricHtml = `<span class="text-sm font-black font-mono text-emerald-400">${run.zeroSixty ? run.zeroSixty.toFixed(2) + 's' : '--'}</span>`;
-          secMetric1 = run.sixty ? `${run.sixty.toFixed(3)}s` : '--';
-          secMetric2 = run.quarter ? `${run.quarter.toFixed(3)}s` : '--';
-        }
-
-        tr.innerHTML = `
-          <td class="py-3.5 px-4 text-center">${rankBadge}</td>
-          <td class="py-3.5 px-4">
-            <div class="flex items-center space-x-2">
-              <span class="font-bold text-white">${run.driver}</span>
-              <span class="text-[10px] font-mono px-1.5 py-0.2 rounded border ${chassisColor}">
-                ${run.vehicle}
-              </span>
-              <span class="text-[10px] font-mono text-neutral-400 bg-neutral-900 px-1 rounded border border-neutral-800">
-                ${run.drivetrain}
-              </span>
-            </div>
-            <div class="text-[11px] text-neutral-400 mt-0.5">${run.tune || 'Tune not listed'}</div>
-          </td>
-          <td class="py-3.5 px-4">
-            <div class="text-neutral-200 text-xs font-semibold">${run.class}</div>
-            <div class="text-[11px] font-mono text-neutral-400">${run.fuel || 'Pump'}</div>
-          </td>
-          <td class="py-3.5 px-4 text-right">${primaryMetricHtml}</td>
-          <td class="py-3.5 px-4 text-right font-mono text-neutral-300">${secMetric1}</td>
-          <td class="py-3.5 px-4 text-right font-mono text-neutral-300">${secMetric2}</td>
-          <td class="py-3.5 px-4 text-center">
-            <span class="inline-flex items-center space-x-1 px-2 py-0.5 rounded text-[10px] font-mono ${run.proofType === 'Dragy' ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-800/60' : 'bg-blue-950/60 text-blue-400 border border-blue-800/60'}">
-              <i class="ph-bold ph-check"></i>
-              <span>${run.proofType || 'Dragy'}</span>
-            </span>
-          </td>
-          <td class="py-3.5 px-4 text-center">
-            <button onclick="viewDetails(${run.id})" class="px-2.5 py-1 rounded bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-xs font-semibold transition">
-              Slip & Specs
-            </button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function viewDetails(id) {
-      const run = leaderboard.find(r => r.id === id);
-      if (!run) return;
-
-      // Handle Car Photo
-      const photoEl = document.getElementById('modal-car-photo');
-      const placeholderEl = document.getElementById('modal-no-photo-placeholder');
-      if (run.carPhoto) {
-        photoEl.src = run.carPhoto;
-        photoEl.classList.remove('hidden');
-        placeholderEl.classList.add('hidden');
-      } else {
-        photoEl.classList.add('hidden');
-        placeholderEl.classList.remove('hidden');
-      }
-
-      document.getElementById('modal-driver').innerText = run.driver;
-      document.getElementById('modal-vehicle').innerText = `${run.vehicle} 3.3T (${run.drivetrain})`;
-      document.getElementById('modal-drivetrain-badge').innerText = `${run.drivetrain} • ${run.class}`;
-      
-      document.getElementById('modal-quarter').innerText = run.quarter ? `${run.quarter.toFixed(3)}s` : '--';
-      document.getElementById('modal-quarter-trap').innerText = run.trap ? `@ ${run.trap} mph` : '';
-      document.getElementById('modal-roll').innerText = run.roll ? `${run.roll.toFixed(2)}s` : '--';
-      document.getElementById('modal-sixty').innerText = run.sixty ? `${run.sixty.toFixed(3)}s` : '--';
-      document.getElementById('modal-eighth').innerText = run.eighth ? `${run.eighth.toFixed(3)}s` : '--';
-      document.getElementById('modal-zerosixty').innerText = run.zeroSixty ? `${run.zeroSixty.toFixed(2)}s` : '--';
-
-      document.getElementById('modal-tune').innerText = run.tune || 'None specified';
-      document.getElementById('modal-fuel').innerText = run.fuel || 'Pump';
-      document.getElementById('modal-turbos').innerText = run.class || 'Stock Turbos';
-      document.getElementById('modal-tires').innerText = run.tires || 'Street Radials';
-      document.getElementById('modal-notes').innerText = run.mods || 'No additional hardware notes provided.';
-
-      document.getElementById('details-modal').classList.remove('hidden');
-      document.getElementById('details-modal').classList.add('flex');
-    }
-
-    function closeDetailsModal() {
-      document.getElementById('details-modal').classList.add('hidden');
-      document.getElementById('details-modal').classList.remove('flex');
-    }
-
-    function openSubmitModal() {
-      document.getElementById('submit-modal').classList.remove('hidden');
-      document.getElementById('submit-modal').classList.add('flex');
-    }
-
-    function closeSubmitModal() {
-      document.getElementById('submit-modal').classList.add('hidden');
-      document.getElementById('submit-modal').classList.remove('flex');
-    }
-
-    function handleFormSubmit(e) {
-      e.preventDefault();
-      
-      const fileInput = document.getElementById('form-photo-file');
-      const urlInput = document.getElementById('form-photo-url').value.trim();
-
-      const proceedWithSave = (photoData) => {
-        const newRun = {
-          id: Date.now(),
-          driver: document.getElementById('form-driver').value.trim(),
-          vehicle: document.getElementById('form-chassis').value,
-          drivetrain: document.getElementById('form-drivetrain').value,
-          class: document.getElementById('form-class').value,
-          quarter: parseFloat(document.getElementById('form-quarter').value) || null,
-          trap: parseFloat(document.getElementById('form-trap').value) || null,
-          roll: parseFloat(document.getElementById('form-roll').value) || null,
-          sixty: parseFloat(document.getElementById('form-sixty').value) || null,
-          eighth: parseFloat(document.getElementById('form-eighth').value) || null,
-          zeroSixty: null,
-          tune: document.getElementById('form-tune').value.trim() || 'Custom Tune',
-          fuel: document.getElementById('form-fuel').value.trim() || 'Pump Gas',
-          tires: 'Street Tires',
-          mods: document.getElementById('form-mods').value.trim() || '',
-          carPhoto: photoData || null,
-          proofType: 'Dragy',
-          verified: true
-        };
-
-        leaderboard.push(newRun);
-        localStorage.setItem('33t_leaderboard_data', JSON.stringify(leaderboard));
-
-        closeSubmitModal();
-        document.getElementById('submit-run-form').reset();
-        renderTable();
-      };
-
-      if (fileInput.files && fileInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          proceedWithSave(evt.target.result);
-        };
-        reader.readAsDataURL(fileInput.files[0]);
-      } else if (urlInput) {
-        proceedWithSave(urlInput);
-      } else {
-        proceedWithSave(null);
-      }
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      renderTable();
-    });
-  </script>
-</body>
-</html>
+              <input type="number"
