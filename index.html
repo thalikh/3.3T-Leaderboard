@@ -6,7 +6,7 @@
   <title>3.3T Lambda II Platform Leaderboard | G70 • Stinger • G80</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Phosphor Icons for high-end automotive UI aesthetic -->
+  <!-- Phosphor Icons for automotive UI aesthetic -->
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
@@ -22,13 +22,6 @@
       background-image: radial-gradient(rgba(239, 68, 68, 0.08) 1px, transparent 0);
       background-size: 24px 24px;
     }
-    .glow-red {
-      box-shadow: 0 0 25px -5px rgba(239, 68, 68, 0.3);
-    }
-    .glow-gold {
-      box-shadow: 0 0 20px -5px rgba(234, 179, 8, 0.3);
-    }
-    /* Custom scrollbars */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
@@ -88,7 +81,7 @@
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
           </span>
-          <span class="text-xs uppercase font-mono tracking-wider text-emerald-400 font-semibold">Official Database</span>
+          <span class="text-xs uppercase font-mono tracking-wider text-emerald-400 font-semibold">Official Platform Database</span>
         </div>
         <h1 class="text-xl md:text-2xl font-black tracking-tight text-white">
           Verified 3.3T G-DI Twin Turbo Rankings
@@ -115,7 +108,7 @@
       </div>
     </div>
 
-    <!-- Metric Tabs (1/4 Mile, 60-130, 1/8 Mile, 0-60) -->
+    <!-- Metric Tabs -->
     <div class="flex flex-wrap items-center justify-between gap-3 border-b border-neutral-800 pb-3">
       <div class="flex items-center space-x-1 bg-neutral-900/90 p-1 rounded-xl border border-neutral-800">
         <button onclick="setMetric('quarter')" id="btn-metric-quarter" class="metric-tab px-3.5 py-1.5 rounded-lg text-xs font-semibold tracking-wide transition bg-red-600 text-white shadow">
@@ -166,16 +159,16 @@
         <span class="text-[11px] font-mono text-neutral-400 uppercase tracking-wider pl-1">Turbo Setup:</span>
         <select id="filter-class" onchange="renderTable()" class="bg-neutral-950 border border-neutral-800 text-neutral-200 text-xs rounded-lg px-2.5 py-1 flex-1 focus:outline-none focus:border-red-500">
           <option value="ALL">All Turbo Classes</option>
-          <option value="Stock Turbo">Stock Turbos</option>
-          <option value="Upgraded Turbo">Upgraded / Hybrids (Pure/ENR/Lozic)</option>
-          <option value="Built Motor">Built Motor</option>
+          <option value="Stock Turbos">Stock Turbos</option>
+          <option value="Hybrid Turbos">Hybrid Turbos</option>
+          <option value="Upgraded / Big Turbos">Upgraded / Big Turbos</option>
         </select>
       </div>
     </div>
 
     <!-- Podium Component (Top 3 for active metric) -->
     <div id="podium-container" class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
-      <!-- Generated via JS -->
+      <!-- Populated via JS -->
     </div>
 
     <!-- Rankings Table Card -->
@@ -218,23 +211,33 @@
     <p class="text-[11px] text-neutral-600">Built for Genesis G70, Kia Stinger GT & Genesis G80 enthusiasts</p>
   </footer>
 
-  <!-- Modal: View Slip & Specs -->
+  <!-- Modal: View Slip & Specs (With Car Photo Header) -->
   <div id="details-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center z-50 p-4">
     <div class="bg-neutral-900 border border-neutral-700/80 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-150">
+      
+      <!-- Car Image Banner -->
+      <div id="modal-car-photo-container" class="relative w-full h-44 bg-neutral-950 overflow-hidden border-b border-neutral-800 flex items-center justify-center">
+        <img id="modal-car-photo" src="" alt="Car Image" class="w-full h-full object-cover hidden">
+        <div id="modal-no-photo-placeholder" class="text-center text-neutral-600">
+          <i class="ph ph-car-profile text-5xl"></i>
+          <span class="block text-[11px] font-mono mt-1 text-neutral-500">No vehicle photo provided</span>
+        </div>
+        <button onclick="closeDetailsModal()" class="absolute top-3 right-3 text-white bg-black/60 hover:bg-black/90 p-1.5 rounded-full backdrop-blur transition">
+          <i class="ph-bold ph-x text-base"></i>
+        </button>
+      </div>
+
       <div class="p-5 border-b border-neutral-800 flex items-center justify-between bg-neutral-950/60">
         <div>
           <div class="flex items-center space-x-2">
             <h3 id="modal-driver" class="font-extrabold text-base text-white">Driver Name</h3>
             <span id="modal-drivetrain-badge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-neutral-800 text-neutral-300">AWD</span>
           </div>
-          <p id="modal-vehicle" class="text-xs text-neutral-400">2022 Genesis G70 3.3T</p>
+          <p id="modal-vehicle" class="text-xs text-neutral-400">Genesis G70 3.3T</p>
         </div>
-        <button onclick="closeDetailsModal()" class="text-neutral-400 hover:text-white p-1 rounded-lg hover:bg-neutral-800">
-          <i class="ph-bold ph-x text-lg"></i>
-        </button>
       </div>
 
-      <div class="p-6 space-y-5 max-h-[80vh] overflow-y-auto">
+      <div class="p-6 space-y-5 max-h-[60vh] overflow-y-auto">
         <!-- Timeslip Summary Card (Dragy style simulated card) -->
         <div class="bg-neutral-950 border border-neutral-800 rounded-xl p-4 font-mono space-y-3">
           <div class="flex items-center justify-between text-xs text-neutral-400 border-b border-neutral-800 pb-2">
@@ -242,7 +245,7 @@
               <i class="ph-fill ph-check-circle"></i>
               <span id="modal-verified-status">Verified Dragy GPS (Valid Slope)</span>
             </span>
-            <span id="modal-date" class="text-[11px] text-neutral-500">2026-03-14</span>
+            <span id="modal-date" class="text-[11px] text-neutral-500">Verified Run</span>
           </div>
 
           <div class="grid grid-cols-2 gap-3 text-center py-2">
@@ -354,11 +357,11 @@
             </select>
           </div>
           <div>
-            <label class="block text-neutral-400 mb-1 font-mono text-[11px]">Turbo Class *</label>
+            <label class="block text-neutral-400 mb-1 font-mono text-[11px]">Turbo Setup *</label>
             <select id="form-class" required class="w-full bg-neutral-950 border border-neutral-800 rounded-lg p-2 text-white focus:outline-none focus:border-red-500">
-              <option value="Stock Turbo">Stock Turbos</option>
-              <option value="Upgraded Turbo">Upgraded / Hybrids (Pure/ENR/etc)</option>
-              <option value="Built Motor">Built Motor</option>
+              <option value="Stock Turbos">Stock Turbos</option>
+              <option value="Hybrid Turbos">Hybrid Turbos</option>
+              <option value="Upgraded / Big Turbos">Upgraded / Big Turbos</option>
             </select>
           </div>
         </div>
@@ -408,7 +411,17 @@
 
         <div>
           <label class="block text-neutral-400 mb-1">Tires & Modifications</label>
-          <textarea id="form-mods" rows="2" placeholder="e.g. Toyo R888R, Upgraded IC, CPI, Catless secondaries..." class="w-full bg-neutral-950 border border-neutral-800 rounded-lg p-2 text-white focus:border-red-500"></textarea>
+          <textarea id="form-mods" rows="2" placeholder="e.g. Toyo R888R, Upgraded Intercooler, CPI, Catless secondaries..." class="w-full bg-neutral-950 border border-neutral-800 rounded-lg p-2 text-white focus:border-red-500"></textarea>
+        </div>
+
+        <!-- Car Photo Input -->
+        <div class="p-3 bg-neutral-950/70 border border-neutral-800 rounded-xl space-y-2">
+          <label class="block text-neutral-300 font-mono text-[11px] font-bold">Vehicle Photo (Optional)</label>
+          <p class="text-[10px] text-neutral-500">Upload a picture of the car or paste an image URL:</p>
+          <input type="file" id="form-photo-file" accept="image/*" class="w-full text-xs text-neutral-400 file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-neutral-800 file:text-neutral-200 hover:file:bg-neutral-700 cursor-pointer">
+          <div class="pt-1">
+            <input type="url" id="form-photo-url" placeholder="Or paste an image URL (https://...)" class="w-full bg-neutral-900 border border-neutral-800 rounded-lg p-2 text-white focus:border-red-500 text-xs">
+          </div>
         </div>
 
         <div class="p-4 bg-neutral-950 border-t border-neutral-800 flex justify-end space-x-2 pt-4">
@@ -424,7 +437,7 @@
   </div>
 
   <script>
-    // CLEAN INITIAL DATA (No sample entries)
+    // Clean initial data
     const initialData = [];
 
     // Load persisted submissions or start with empty array
@@ -435,7 +448,6 @@
     function setMetric(metric) {
       currentMetric = metric;
       
-      // Update UI button highlights
       document.querySelectorAll('.metric-tab').forEach(btn => {
         btn.classList.remove('bg-red-600', 'text-white', 'shadow');
         btn.classList.add('text-neutral-400');
@@ -446,7 +458,6 @@
         activeBtn.classList.add('bg-red-600', 'text-white', 'shadow');
       }
 
-      // Update Table Headers
       const thPrimary = document.getElementById('th-primary-metric');
       const thSec1 = document.getElementById('th-sec-metric-1');
       const thSec2 = document.getElementById('th-sec-metric-2');
@@ -491,7 +502,6 @@
           if (!matchDriver && !matchMods && !matchTune && !matchFuel) return false;
         }
 
-        // Must have the metric recorded
         if (currentMetric === 'quarter' && !item.quarter) return false;
         if (currentMetric === 'roll' && !item.roll) return false;
         if (currentMetric === 'eighth' && !item.eighth) return false;
@@ -556,11 +566,11 @@
 
           <div class="my-3">
             <h3 class="text-base font-extrabold text-white truncate">${run.driver}</h3>
-            <p class="text-xs text-neutral-400">${run.year || ''} ${run.vehicle} 3.3T</p>
+            <p class="text-xs text-neutral-400">${run.vehicle} 3.3T • ${run.class}</p>
           </div>
 
           <div class="bg-neutral-950/70 rounded-lg p-2.5 border border-neutral-800/80 flex items-center justify-between">
-            <span class="text-[11px] font-mono text-neutral-400">Score</span>
+            <span class="text-[11px] font-mono text-neutral-400">Time</span>
             <span class="text-sm font-black font-mono ${meta.text}">${primaryMetricDisplay}</span>
           </div>
         `;
@@ -595,12 +605,10 @@
         if (index === 1) rankBadge = `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-400/20 text-slate-300 font-bold font-mono text-xs border border-slate-400/40">2</span>`;
         if (index === 2) rankBadge = `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-800/20 text-amber-600 font-bold font-mono text-xs border border-amber-700/40">3</span>`;
 
-        // Chassis badge colors
         const chassisColor = run.vehicle === 'G70' ? 'text-rose-400 bg-rose-950/40 border-rose-800/50' :
                              run.vehicle === 'Stinger' ? 'text-amber-400 bg-amber-950/40 border-amber-800/50' :
                              'text-blue-400 bg-blue-950/40 border-blue-800/50';
 
-        // Dynamic primary and secondary metrics
         let primaryMetricHtml = '';
         let secMetric1 = '';
         let secMetric2 = '';
@@ -664,8 +672,20 @@
       const run = leaderboard.find(r => r.id === id);
       if (!run) return;
 
+      // Handle Car Photo
+      const photoEl = document.getElementById('modal-car-photo');
+      const placeholderEl = document.getElementById('modal-no-photo-placeholder');
+      if (run.carPhoto) {
+        photoEl.src = run.carPhoto;
+        photoEl.classList.remove('hidden');
+        placeholderEl.classList.add('hidden');
+      } else {
+        photoEl.classList.add('hidden');
+        placeholderEl.classList.remove('hidden');
+      }
+
       document.getElementById('modal-driver').innerText = run.driver;
-      document.getElementById('modal-vehicle').innerText = `${run.year || ''} ${run.vehicle} 3.3T (${run.drivetrain})`;
+      document.getElementById('modal-vehicle').innerText = `${run.vehicle} 3.3T (${run.drivetrain})`;
       document.getElementById('modal-drivetrain-badge').innerText = `${run.drivetrain} • ${run.class}`;
       
       document.getElementById('modal-quarter').innerText = run.quarter ? `${run.quarter.toFixed(3)}s` : '--';
@@ -677,7 +697,7 @@
 
       document.getElementById('modal-tune').innerText = run.tune || 'None specified';
       document.getElementById('modal-fuel').innerText = run.fuel || 'Pump';
-      document.getElementById('modal-turbos').innerText = run.class || 'Stock Turbo';
+      document.getElementById('modal-turbos').innerText = run.class || 'Stock Turbos';
       document.getElementById('modal-tires').innerText = run.tires || 'Street Radials';
       document.getElementById('modal-notes').innerText = run.mods || 'No additional hardware notes provided.';
 
@@ -703,36 +723,52 @@
     function handleFormSubmit(e) {
       e.preventDefault();
       
-      const newRun = {
-        id: Date.now(),
-        driver: document.getElementById('form-driver').value.trim(),
-        vehicle: document.getElementById('form-chassis').value,
-        drivetrain: document.getElementById('form-drivetrain').value,
-        class: document.getElementById('form-class').value,
-        quarter: parseFloat(document.getElementById('form-quarter').value) || null,
-        trap: parseFloat(document.getElementById('form-trap').value) || null,
-        roll: parseFloat(document.getElementById('form-roll').value) || null,
-        sixty: parseFloat(document.getElementById('form-sixty').value) || null,
-        eighth: parseFloat(document.getElementById('form-eighth').value) || null,
-        zeroSixty: null,
-        tune: document.getElementById('form-tune').value.trim() || 'Custom Tune',
-        fuel: document.getElementById('form-fuel').value.trim() || 'Pump Gas',
-        tires: 'Street Tires',
-        mods: document.getElementById('form-mods').value.trim() || '',
-        proofType: 'Dragy',
-        verified: true,
-        year: '2022'
+      const fileInput = document.getElementById('form-photo-file');
+      const urlInput = document.getElementById('form-photo-url').value.trim();
+
+      const proceedWithSave = (photoData) => {
+        const newRun = {
+          id: Date.now(),
+          driver: document.getElementById('form-driver').value.trim(),
+          vehicle: document.getElementById('form-chassis').value,
+          drivetrain: document.getElementById('form-drivetrain').value,
+          class: document.getElementById('form-class').value,
+          quarter: parseFloat(document.getElementById('form-quarter').value) || null,
+          trap: parseFloat(document.getElementById('form-trap').value) || null,
+          roll: parseFloat(document.getElementById('form-roll').value) || null,
+          sixty: parseFloat(document.getElementById('form-sixty').value) || null,
+          eighth: parseFloat(document.getElementById('form-eighth').value) || null,
+          zeroSixty: null,
+          tune: document.getElementById('form-tune').value.trim() || 'Custom Tune',
+          fuel: document.getElementById('form-fuel').value.trim() || 'Pump Gas',
+          tires: 'Street Tires',
+          mods: document.getElementById('form-mods').value.trim() || '',
+          carPhoto: photoData || null,
+          proofType: 'Dragy',
+          verified: true
+        };
+
+        leaderboard.push(newRun);
+        localStorage.setItem('33t_leaderboard_data', JSON.stringify(leaderboard));
+
+        closeSubmitModal();
+        document.getElementById('submit-run-form').reset();
+        renderTable();
       };
 
-      leaderboard.push(newRun);
-      localStorage.setItem('33t_leaderboard_data', JSON.stringify(leaderboard));
-
-      closeSubmitModal();
-      document.getElementById('submit-run-form').reset();
-      renderTable();
+      if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          proceedWithSave(evt.target.result);
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      } else if (urlInput) {
+        proceedWithSave(urlInput);
+      } else {
+        proceedWithSave(null);
+      }
     }
 
-    // Initialize application on page load
     window.addEventListener('DOMContentLoaded', () => {
       renderTable();
     });
